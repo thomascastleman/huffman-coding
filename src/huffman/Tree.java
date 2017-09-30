@@ -15,6 +15,7 @@ public class Tree extends Main {
 		
 	}
 	
+	// given a priority queue of nodes, construct a huffman tree
 	public void constructFromPQ(PriorityQueue pq) {
 		
 		Node parent = null;
@@ -41,7 +42,23 @@ public class Tree extends Main {
 	}
 	
 	public void initializeBinEquiv() {
-		
+		dfsForBinEquiv(this.root, "");
+	}
+	
+	public void dfsForBinEquiv(Node n, String currentBinString) {
+		// if left child exists
+		if (n.leftChild != null) {
+			dfsForBinEquiv(n.leftChild, currentBinString + String.valueOf(super.leftBit));
+		}
+		// if right child exists
+		if (n.rightChild != null) {
+			dfsForBinEquiv(n.rightChild, currentBinString + String.valueOf(super.rightBit));
+		}
+		// if char not null
+		if ((int) n.content != 0) {
+			// add char mapped to current binary string
+			binEquiv.put(n.content, currentBinString);
+		}
 	}
 	
 	public void encode(String text) {

@@ -19,8 +19,15 @@ public class Main {
 		
 		
 		
-//		Tree t = new Tree();
-//		t.constructFromPQ(pq);
+		Tree t = new Tree();
+		t.constructFromPQ(pq);
+		t.initializeBinEquiv();
+		
+		System.out.println(t.binEquiv.get('a'));
+		System.out.println(t.binEquiv.get('b'));
+		System.out.println(t.binEquiv.get('c'));
+		
+		
 //		
 //		logNode(t.root);
 //		
