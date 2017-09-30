@@ -3,7 +3,15 @@ package huffman;
 public class Main {
 
 	public static void main(String[] args) {
-		System.out.println("Teest");
+		
+		PriorityQueue pq = new PriorityQueue();
+		
+		
+
+	}
+	
+	public static void logNode(Node n) {
+		System.out.print("\nContent: " + n.content + ", " + n.priority);
 
 	}
 
