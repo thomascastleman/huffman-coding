@@ -9,11 +9,34 @@ public class Tree extends Main {
 	
 	public Formatter f;
 	
-	public Tree(String raw) {
-		System.out.println("");
+	public Tree(String filename, Boolean fromSerialization) {
+		/*
+		 * if not from serialization:
+		 * 		format file to single string
+		 * 		pq = constructPQFromText(text)
+		 * 		constructFromPQ(pq)
+		 * 
+		 * if from serialization:
+		 * 		maybe format? depends on serialization
+		 * 		constructFromSerialization( ? )
+		 * 
+		 * 
+		 * then, initializeBinEquiv()
+		 * 
+		 */
 	}
 	
 	public Tree() {
+		
+	}
+	
+	// given string of text, construct priority queue based on char frequency
+//	public PriorityQueue constructPQFromText(String text) {
+//		
+//	}
+	
+	// construct tree from serialization
+	public void constructFromSerialization(String text) {
 		
 	}
 	

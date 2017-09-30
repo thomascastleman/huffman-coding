@@ -7,6 +7,25 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+		/*
+		 * Projected Use:
+		 * 
+		 * if I have a plaintext file:
+		 * 
+		 * Tree t = new Tree("file.txt", false);
+		 * t.encodeFile("file.txt");
+		 * 
+		 * 
+		 * 
+		 * if I have a serialization file:
+		 * 
+		 * Tree t = new Tree("serialization.txt", true);
+		 * t.decodeFile("binaryEncoding.txt");
+		 * 
+		 */
+		
+		
+		
 		PriorityQueue pq = new PriorityQueue();
 		
 		Node n0 = new Node('a');
