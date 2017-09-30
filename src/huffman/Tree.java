@@ -65,6 +65,7 @@ public class Tree extends Main {
 		}
 	}
 	
+	// encode a string of text using already existing hashmap from chars to binary
 	public void encode(String text) {
 		
 		try {
@@ -85,6 +86,36 @@ public class Tree extends Main {
 	
 	public void decode(String binary) {
 		
+		try {
+			f = new Formatter("decoded.txt");
+		} catch (Exception e) {
+			System.out.println("Error creating file (Tree.decode)");
+		}
+		
+		Node current = this.root;
+		
+		for (int i = 0; i < binary.length(); i++) {
+			if (binary.charAt(i) - '0' == 1) {
+				if (super.leftBit == 1) {
+					current = current.leftChild;
+				} else {
+					current = current.rightChild;
+				}
+			} else if (binary.charAt(i) - '0' == 0) {
+				if (super.leftBit == 0) {
+					current = current.leftChild;
+				} else {
+					current = current.rightChild;
+				}
+			}
+			
+			if (current.rightChild == null && current.leftChild == null) {
+				f.format("%c", current.content);
+				current = this.root;
+			}
+		}
+		
+		f.close();
 	}
 	
 	public void serializeTree() {

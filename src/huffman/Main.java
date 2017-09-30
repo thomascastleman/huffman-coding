@@ -21,7 +21,9 @@ public class Main {
 		t.constructFromPQ(pq);
 		t.initializeBinEquiv();
 		
-		t.encode("abcaaaccb");
+		// t.encode("abccba");
+		
+		t.decode("1010000011");
 		
 		
 //		
