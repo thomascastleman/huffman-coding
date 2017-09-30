@@ -9,6 +9,33 @@ public class Main {
 		
 		PriorityQueue pq = new PriorityQueue();
 		
+		Node n0 = new Node('a');
+		Node n1 = new Node('b');
+		Node n2 = new Node('c');
+		
+		pq.enqueue(n0,  10);
+		pq.enqueue(n1,  3);
+		pq.enqueue(n2,  1);
+		
+		
+		
+//		Tree t = new Tree();
+//		t.constructFromPQ(pq);
+//		
+//		logNode(t.root);
+//		
+//		System.out.print("\nleft: ");
+//		logNode(t.root.leftChild);
+//		System.out.print("\nright: ");
+//		logNode(t.root.rightChild);
+//		
+//		System.out.print("\nleft: ");
+//		logNode(t.root.leftChild.leftChild);
+//		System.out.print("\nright: ");
+//		logNode(t.root.leftChild.rightChild);
+		
+		
+		
 
 	}
 	

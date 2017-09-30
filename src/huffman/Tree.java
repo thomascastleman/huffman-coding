@@ -15,11 +15,32 @@ public class Tree extends Main {
 		
 	}
 	
-	public void initializeBinEquiv() {
+	public void constructFromPQ(PriorityQueue pq) {
 		
+		Node parent = null;
+		
+		while (pq.objects.size() > 0) {
+			parent = new Node();
+			
+			// pop 2 nodes off pq
+			parent.leftChild = pq.dequeue();
+			parent.rightChild = pq.dequeue();
+			
+			// get their respective priorities
+			int leftPriority = parent.leftChild == null ? 0 : pq.nodeToPriority.get(parent.leftChild);
+			int rightPriority = parent.rightChild == null ? 0 : pq.nodeToPriority.get(parent.rightChild);
+			
+			if (pq.objects.size() > 0) {
+				// enqueue parent node with sum of priorities
+				pq.enqueue(parent,  leftPriority + rightPriority);
+			}
+		}
+		
+		// set root to final parent
+		this.root = parent;	
 	}
 	
-	public void constructFromPQ(PriorityQueue pq) {
+	public void initializeBinEquiv() {
 		
 	}
 	

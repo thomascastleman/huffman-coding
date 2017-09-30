@@ -9,4 +9,8 @@ public class Node extends Tree {
 	public Node(char content_) {
 		this.content = content_;
 	}
+	
+	public Node() {
+		
+	}
 }
