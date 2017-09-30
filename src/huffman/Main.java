@@ -17,15 +17,11 @@ public class Main {
 		pq.enqueue(n1,  3);
 		pq.enqueue(n2,  1);
 		
-		
-		
 		Tree t = new Tree();
 		t.constructFromPQ(pq);
 		t.initializeBinEquiv();
 		
-		System.out.println(t.binEquiv.get('a'));
-		System.out.println(t.binEquiv.get('b'));
-		System.out.println(t.binEquiv.get('c'));
+		t.encode("abcaaaccb");
 		
 		
 //		

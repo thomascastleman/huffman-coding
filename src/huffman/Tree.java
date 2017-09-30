@@ -7,6 +7,8 @@ public class Tree extends Main {
 	public Node root;
 	public HashMap<Character, String> binEquiv = new HashMap<Character, String>();
 	
+	public Formatter f;
+	
 	public Tree(String raw) {
 		System.out.println("");
 	}
@@ -41,10 +43,12 @@ public class Tree extends Main {
 		this.root = parent;	
 	}
 	
+	// initialize the hashmap of characters to binary representations
 	public void initializeBinEquiv() {
 		dfsForBinEquiv(this.root, "");
 	}
 	
+	// DFS tree and populate binEquiv hashmap
 	public void dfsForBinEquiv(Node n, String currentBinString) {
 		// if left child exists
 		if (n.leftChild != null) {
@@ -62,6 +66,20 @@ public class Tree extends Main {
 	}
 	
 	public void encode(String text) {
+		
+		try {
+			f = new Formatter("binary.txt");
+		} catch (Exception e) {
+			System.out.println("Error creating file (Tree.encode)");
+		}
+		
+		for (int i = 0; i < text.length(); i++) {
+			
+			f.format("%s", binEquiv.get(text.charAt(i)));
+			
+		}
+		
+		f.close();
 		
 	}
 	
