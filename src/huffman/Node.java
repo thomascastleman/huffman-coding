@@ -6,10 +6,7 @@ public class Node extends Tree {
 	public Node leftChild;		// left child in bst
 	public Node rightChild;		// right child in bst
 	
-	public int priority;		// frequency of content (used only for priority queue)
-	
-	public Node(char content_, int priority_) {
+	public Node(char content_) {
 		this.content = content_;
-		this.priority = priority_;
 	}
 }

@@ -6,13 +6,18 @@ public class PriorityQueue extends Tree {
 	
 	public ArrayList<Node> objects = new ArrayList<Node>();
 	
+	public HashMap<Node, Integer> nodeToPriority = new HashMap<Node, Integer>();
+	
 	// enqueue node to priority queue
-	public void enqueue(Node n) {
+	public void enqueue(Node n, int priority) {
+		// add entry to hashmap
+		nodeToPriority.put(n, priority);
+		
 		for (int i = 0; i <= this.objects.size(); i++) {
 			if (i == this.objects.size()) {
 				this.objects.add(n);
 				break;
-			} else if (this.objects.get(i).priority > n.priority) {
+			} else if (nodeToPriority.get(this.objects.get(i)) > priority) {
 				this.objects.add(i, n);
 				break;
 			}
