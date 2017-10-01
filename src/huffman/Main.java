@@ -24,23 +24,42 @@ public class Main {
 		 * Tree t = new Tree("serialization.txt", true);
 		 * t.decodeFile("binaryEncoding.txt");
 		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * if I then want to serialize:
+		 * t.serializeTree("serializetothisfile.txt");
+		 * 
 		 */
 		
+		Tree t = new Tree("input.txt", false);
+		
+		System.out.println(t.binEquiv.get('H'));
 		
 		
-		PriorityQueue pq = new PriorityQueue();
 		
-		Node n0 = new Node('a');
-		Node n1 = new Node('b');
-		Node n2 = new Node('c');
 		
-		pq.enqueue(n0,  10);
-		pq.enqueue(n1,  3);
-		pq.enqueue(n2,  1);
+//		PriorityQueue pq = new PriorityQueue();
+//		
+//		Node n0 = new Node('a');
+//		Node n1 = new Node('b');
+//		Node n2 = new Node('c');
+//		
+//		pq.enqueue(n0,  10);
+//		pq.enqueue(n1,  3);
+//		pq.enqueue(n2,  1);
+//		
+//		Tree t = new Tree();
+//		t.constructFromPQ(pq);
+//		t.initializeBinEquiv();
 		
-		Tree t = new Tree();
-		t.constructFromPQ(pq);
-		t.initializeBinEquiv();
+//		Tree t = new Tree();
+//		PriorityQueue pq = t.constructPQFromText("this is the text");
+//		t.constructFromPQ(pq);
+//		t.initializeBinEquiv();
+		
+		// t.serializeTree("s.txt");
 		
 //		ArrayList<Character> chars = new ArrayList<Character>();
 //		chars.add('\u0000');

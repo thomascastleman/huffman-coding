@@ -11,6 +11,36 @@ public class Tree extends Main {
 	public Formatter f;
 	
 	public Tree(String filename, Boolean fromSerialization) {
+		
+		ArrayList<Character> chars = new ArrayList<Character>();
+		String text = "";
+		
+		// read in file
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(filename);
+			BufferedReader bufferedReader =  new BufferedReader(fileReader);
+			
+			while ((line = bufferedReader.readLine()) != null) { 
+				
+				if (fromSerialization) {
+					char toChar = line.charAt(0);
+					chars.add(toChar);
+				} else {
+					text += line + '\n';
+				}
+			}
+
+			bufferedReader.close();
+		}
+		
+		catch(FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + filename + "'");
+		}
+		catch(IOException ex) {
+			System.out.println("Error reading file '" + filename + "'");
+		}
+		
 		/*
 		 * if not from serialization:
 		 * 		format file to single string
@@ -26,29 +56,22 @@ public class Tree extends Main {
 		 * 
 		 */
 		
-		// SERIALIZATION:
-//		String line = null;
-//		ArrayList<Character> lines = new ArrayList<Character>();
-//		try {
-//			FileReader fileReader = new FileReader(filename);
-//			BufferedReader bufferedReader =  new BufferedReader(fileReader);
-//			
-//			while ((line = bufferedReader.readLine()) != null) { 
-//				char toChar = line.charAt(0);
-//				lines.add(toChar);
-//			}
-//
-//			bufferedReader.close();
-//		}
-//		
-//		catch(FileNotFoundException ex) {
-//			System.out.println("Unable to open file '" + filename + "'");
-//		}
-//		catch(IOException ex) {
-//			System.out.println("Error reading file '" + filename + "'");
-//		}
 		
-		// now construct from lines
+		
+		if (!fromSerialization) {
+			PriorityQueue pq = this.constructPQFromText(text);
+			
+			for (int i = 0; i < pq.objects.size(); i++) {
+				System.out.println(pq.objects.get(i).content + " " + pq.nodeToPriority.get(pq.objects.get(i)));
+			}
+			
+			this.constructFromPQ(pq);
+			
+		} else {
+			this.constructFromSerialization(chars);
+		}
+		
+		this.initializeBinEquiv();
 	}
 	
 	public Tree() {
@@ -56,9 +79,32 @@ public class Tree extends Main {
 	}
 	
 	// given string of text, construct priority queue based on char frequency
-//	public PriorityQueue constructPQFromText(String text) {
-//		
-//	}
+	public PriorityQueue constructPQFromText(String text) {
+		HashMap<Character, Integer> charToFrequency = new HashMap<Character, Integer>();
+		
+		// map characters to frequencies in text
+		for (int i = 0; i < text.length(); i++) {
+			char c = text.charAt(i);
+			if (charToFrequency.get(c) != null) {
+				charToFrequency.put(c, charToFrequency.get(c) + 1);
+			} else {
+				charToFrequency.put(c, 1);
+			}
+		}
+		
+		PriorityQueue pq = new PriorityQueue();
+		
+		// all keys in hashmap
+		ArrayList<Character> chars = new ArrayList<Character>(charToFrequency.keySet());
+		
+		// create node for each character, enqueue with frequency as priority
+		for (int i = 0; i < chars.size(); i++) {
+			Node n = new Node(chars.get(i));
+			pq.enqueue(n, charToFrequency.get(chars.get(i)));
+		}
+		
+		return pq;
+	}
 	
 	// given a priority queue of nodes, construct a huffman tree
 	public void constructFromPQ(PriorityQueue pq) {
@@ -106,6 +152,14 @@ public class Tree extends Main {
 			// add char mapped to current binary string
 			binEquiv.put(n.content, currentBinString);
 		}
+	}
+	
+	public void encodeFile(String filename) {
+		
+	}
+	
+	public void decodeFile(String filename) {
+		
 	}
 	
 	// encode a string of text using already existing hashmap from chars to binary
@@ -186,7 +240,7 @@ public class Tree extends Main {
 //					f.format("%c\n", current.leftChild.content);
 //				}
 				
-				f.format("%c\n", current.leftChild.content);
+				f.format("%c", current.leftChild.content);
 				q.add(current.leftChild);
 			}
 			if (current.rightChild != null) {
@@ -197,7 +251,7 @@ public class Tree extends Main {
 //					f.format("%c\n", current.rightChild.content);
 //				}
 				
-				f.format("%c\n", current.rightChild.content);
+				f.format("%c", current.rightChild.content);
 				q.add(current.rightChild);
 			}
 		}
