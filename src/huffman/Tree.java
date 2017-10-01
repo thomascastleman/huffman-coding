@@ -6,10 +6,11 @@ import java.io.*;
 public class Tree extends Main {
 	
 	public Node root; // public nodity
-	public HashMap<Character, String> binEquiv = new HashMap<Character, String>();
+	public HashMap<Character, String> binEquiv = new HashMap<Character, String>();	// hashmap of characters to their binary representations as determined by tree
 	
 	public Formatter f;
 	
+	// constructor for Tree: given filename of either text or serialization data, and boolean indicating which one it is 
 	public Tree(String filename, Boolean fromSerialization) {
 		filename = filename.replaceAll("/", fileSeparator);//universal system paths 
 		
@@ -30,7 +31,9 @@ public class Tree extends Main {
 				
 				if (fromSerialization) {
 					
+					// if not standard char
 					if (line.length() > 1) {
+						// check special cases: ## represents null char and \n represents newline
 						if (line.equals("##")) {
 							chars.add('\u0000');
 						} else if (line.equals("\\n")) {
@@ -41,6 +44,7 @@ public class Tree extends Main {
 					}
 
 				} else {
+					// add line to total text
 					text += line;
 				}
 				count++;
@@ -56,50 +60,24 @@ public class Tree extends Main {
 			System.out.println("Error reading file '" + filename + "'");
 		}
 		
-		/*
-		 * if not from serialization:
-		 * 		format file to single string
-		 * 		pq = constructPQFromText(text)
-		 * 		constructFromPQ(pq)
-		 * 
-		 * if from serialization:
-		 * 		maybe format? depends on serialization
-		 * 		constructFromSerialization( ? )
-		 * 
-		 * 
-		 * then, initializeBinEquiv()
-		 * 
-		 */
-		
-		
-		
 		if (!fromSerialization) {
+			// construct a priority based on frequencies in text
 			PriorityQueue pq = this.constructPQFromText(text);
-			
-//			for (int i = 0; i < pq.objects.size(); i++) {
-//				System.out.println(pq.objects.get(i).content + " " + pq.nodeToPriority.get(pq.objects.get(i)));
-//			}
-			
+			// construct tree from pq
 			this.constructFromPQ(pq);
 			
 		} else {
+			// construct tree, given serialization data
 			this.constructFromSerialization(chars);
 		}
 		
+		// initialize binequiv hashmap for quick encoding
 		this.initializeBinEquiv();
 	}
 
+	// empty constructor
 	public Tree() {
 		
-	}
-	
-	// DEBUG
-	public void logBinEquiv() {
-		ArrayList<Character> keys = new ArrayList<Character>(this.binEquiv.keySet());
-		
-		for (int i = 0; i < keys.size(); i++) {
-			System.out.println(keys.get(i) + ": " + this.binEquiv.get(keys.get(i)));
-		}
 	}
 	
 	// given string of text, construct priority queue based on char frequency
@@ -132,11 +110,10 @@ public class Tree extends Main {
 	
 	// given a priority queue of nodes, construct a huffman tree
 	public void constructFromPQ(PriorityQueue pq) {
-		
 		Node parent = null;
 		
 		while (pq.objects.size() > 0) {
-			parent = new Node();
+			parent = new Node(); // create parent node
 			
 			// pop 2 nodes off pq
 			parent.leftChild = pq.dequeue();
@@ -178,6 +155,7 @@ public class Tree extends Main {
 		}
 	}
 	
+	// given file to read text from, encode to another file
 	public void encodeFile(String readFrom, String writeTo) {
 		readFrom = readFrom.replaceAll("/", fileSeparator);//universal system paths 
 		
@@ -204,7 +182,8 @@ public class Tree extends Main {
 		
 		this.encode(total, writeTo);
 	}
-	
+
+	// given file to read binary from, decode to text into another file
 	public void decodeFile(String readFrom, String writeTo) {
 		readFrom = readFrom.replaceAll("/", fileSeparator);//universal system paths 
 		
@@ -234,7 +213,7 @@ public class Tree extends Main {
 		
 	}
 	
-	// encode a string of text using already existing hashmap from chars to binary
+	// encode a string of text to a file using hashmap from chars to binary
 	public void encode(String text, String filename) {
 		filename = filename.replaceAll("/", fileSeparator);//universal system paths 
 		
@@ -244,16 +223,16 @@ public class Tree extends Main {
 			System.out.println("Error creating file (Tree.encode)");
 		}
 		
+		// for each character, write binary representation to new file
 		for (int i = 0; i < text.length(); i++) {
-			
 			f.format("%s", binEquiv.get(text.charAt(i)));
-			
 		}
 		
 		f.close();
 		
 	}
 	
+	// decode a string of binary by tracing down tree and recording leaf node content
 	public void decode(String binary, String filename) {
 		filename = filename.replaceAll("/", fileSeparator);//universal system paths 
 		
@@ -266,13 +245,17 @@ public class Tree extends Main {
 		Node current = this.root;
 		
 		for (int i = 0; i < binary.length(); i++) {
-			if (binary.charAt(i) - '0' == 1) {
+			// if bit is 1
+			if (binary.charAt(i) == '\u0031') {
+				// move to left or right child according to tree rules
 				if (super.leftBit == 1) {
 					current = current.leftChild;
 				} else {
 					current = current.rightChild;
 				}
-			} else if (binary.charAt(i) - '0' == 0) {
+			// if bit is 0
+			} else if (binary.charAt(i) == '\u0030') {
+				// move to left or right child according to tree rules
 				if (super.leftBit == 0) {
 					current = current.leftChild;
 				} else {
@@ -280,8 +263,11 @@ public class Tree extends Main {
 				}
 			}
 			
+			// if current node is leaf
 			if (current.rightChild == null && current.leftChild == null) {
+				// write content to file
 				f.format("%c", current.content);
+				// reset at root
 				current = this.root;
 			}
 		}
@@ -289,7 +275,7 @@ public class Tree extends Main {
 		f.close();
 	}
 	
-	// serialize tree to given file
+	// serialize tree to given file using BFS
 	public void serializeTree(String writeTo) {
 		writeTo = writeTo.replaceAll("/", fileSeparator); //universal system paths 
 		
@@ -301,11 +287,13 @@ public class Tree extends Main {
 			q.add(this.root);
 			
 			while (q.size() > 0) {
+				// pop node from queue
 				Node current = q.get(0);
 				q.remove(0);
 				
 				if (current.leftChild != null) {
 
+					// write left child content
 					if (current.leftChild.content == '\u0000') {
 						file.write("##");
 					} else if (current.leftChild.content == '\n') {
@@ -315,10 +303,12 @@ public class Tree extends Main {
 					}
 					file.write('\n');
 					
+					// add to queue
 					q.add(current.leftChild);
 				}
 				if (current.rightChild != null) {
 
+					// write right child content
 					if (current.rightChild.content == '\u0000') {
 						file.write("##");
 					} else if (current.rightChild.content == '\n') {
@@ -326,9 +316,9 @@ public class Tree extends Main {
 					} else {
 						file.write(current.rightChild.content);
 					}
-					
 					file.write('\n');
 
+					// add to queue
 					q.add(current.rightChild);
 				}
 			}
@@ -342,31 +332,33 @@ public class Tree extends Main {
 	}
 	
 	// construct tree from array of chars from serialization file
-	public void constructFromSerialization(ArrayList<Character> lines) {
-		ArrayList<Node> needChildren = new ArrayList<Node>();
+	public void constructFromSerialization(ArrayList<Character> chars) {
+		ArrayList<Node> needChildren = new ArrayList<Node>();	// array of which body nodes have yet to be given children
 		this.root = new Node();
 		needChildren.add(this.root);
 		
-		for (int i = 0; i < lines.size() - 1; i += 2) {
+		// for char in serialization data
+		for (int i = 0; i < chars.size() - 1; i += 2) {
+			// pop parent from needchildren
 			Node parent = needChildren.get(0);
 			needChildren.remove(0);
 			
 			// left child
-			if (lines.get(i) == '\u0000') {
+			if (chars.get(i) == '\u0000') {
 				Node lChild = new Node();
 				parent.leftChild = lChild;
 				needChildren.add(lChild);
 			} else {
-				parent.leftChild = new Node(lines.get(i));
+				parent.leftChild = new Node(chars.get(i));
 			}
 			
 			// right child
-			if (lines.get(i + 1) == '\u0000') {
+			if (chars.get(i + 1) == '\u0000') {
 				Node rChild = new Node();
 				parent.rightChild = rChild;
 				needChildren.add(rChild);
 			} else {
-				parent.rightChild = new Node(lines.get(i + 1));
+				parent.rightChild = new Node(chars.get(i + 1));
 			}
 		}
 	}
