@@ -5,7 +5,7 @@ import java.io.*;
 
 public class Tree extends Main {
 	
-	public Node root;
+	public Node root; // public nodity
 	public HashMap<Character, String> binEquiv = new HashMap<Character, String>();
 	
 	public Formatter f;
@@ -22,14 +22,28 @@ public class Tree extends Main {
 			FileReader fileReader = new FileReader(filename);
 			BufferedReader bufferedReader =  new BufferedReader(fileReader);
 			
+			int count = 0;
 			while ((line = bufferedReader.readLine()) != null) { 
+				if (count > 0) {
+					text += '\n';
+				}
 				
 				if (fromSerialization) {
-					char toChar = line.charAt(0);
-					chars.add(toChar);
+					
+					if (line.length() > 1) {
+						if (line.equals("##")) {
+							chars.add('\u0000');
+						} else if (line.equals("\\n")) {
+							chars.add('\n');
+						}
+					} else {
+						chars.add(line.charAt(0));
+					}
+
 				} else {
-					text += line + '\n';
+					text += line;
 				}
+				count++;
 			}
 
 			bufferedReader.close();
@@ -62,9 +76,9 @@ public class Tree extends Main {
 		if (!fromSerialization) {
 			PriorityQueue pq = this.constructPQFromText(text);
 			
-			for (int i = 0; i < pq.objects.size(); i++) {
-				System.out.println(pq.objects.get(i).content + " " + pq.nodeToPriority.get(pq.objects.get(i)));
-			}
+//			for (int i = 0; i < pq.objects.size(); i++) {
+//				System.out.println(pq.objects.get(i).content + " " + pq.nodeToPriority.get(pq.objects.get(i)));
+//			}
 			
 			this.constructFromPQ(pq);
 			
@@ -74,9 +88,18 @@ public class Tree extends Main {
 		
 		this.initializeBinEquiv();
 	}
-	
+
 	public Tree() {
 		
+	}
+	
+	// DEBUG
+	public void logBinEquiv() {
+		ArrayList<Character> keys = new ArrayList<Character>(this.binEquiv.keySet());
+		
+		for (int i = 0; i < keys.size(); i++) {
+			System.out.println(keys.get(i) + ": " + this.binEquiv.get(keys.get(i)));
+		}
 	}
 	
 	// given string of text, construct priority queue based on char frequency
@@ -267,48 +290,55 @@ public class Tree extends Main {
 	}
 	
 	// serialize tree to given file
-	public void serializeTree(String filename) {
-		filename = filename.replaceAll("/", fileSeparator);//universal system paths 
+	public void serializeTree(String writeTo) {
+		writeTo = writeTo.replaceAll("/", fileSeparator); //universal system paths 
 		
 		try {
-			f = new Formatter(filename);
-		} catch (Exception e) { 
-			System.out.println("Error creating file (Tree.serializeTree)");
-		}
-		
-		ArrayList<Node> q = new ArrayList<Node>();
-		
-		q.add(this.root);
-		
-		while (q.size() > 0) {
-			Node current = q.get(0);
-			q.remove(0);
 			
-			if (current.leftChild != null) {
-
-//				if (current.leftChild.content == '\u0000') {
-//					f.format("%c\n", '\u0000');
-//				} else {
-//					f.format("%c\n", current.leftChild.content);
-//				}
-				
-				f.format("%c", current.leftChild.content);
-				q.add(current.leftChild);
-			}
-			if (current.rightChild != null) {
-
-//				if (current.rightChild.content == '\u0000') {
-//					f.format("%c\n", '\u0000');
-//				} else {
-//					f.format("%c\n", current.rightChild.content);
-//				}
-				
-				f.format("%c", current.rightChild.content);
-				q.add(current.rightChild);
-			}
-		}
+			BufferedWriter file = new BufferedWriter(new FileWriter(writeTo));
 		
-		f.close();
+			ArrayList<Node> q = new ArrayList<Node>();
+			q.add(this.root);
+			
+			while (q.size() > 0) {
+				Node current = q.get(0);
+				q.remove(0);
+				
+				if (current.leftChild != null) {
+
+					if (current.leftChild.content == '\u0000') {
+						file.write("##");
+					} else if (current.leftChild.content == '\n') {
+						file.write("\\n");
+					} else {
+						file.write(current.leftChild.content);
+					}
+					file.write('\n');
+					
+					q.add(current.leftChild);
+				}
+				if (current.rightChild != null) {
+
+					if (current.rightChild.content == '\u0000') {
+						file.write("##");
+					} else if (current.rightChild.content == '\n') {
+						file.write("\\n");
+					} else {
+						file.write(current.rightChild.content);
+					}
+					
+					file.write('\n');
+
+					q.add(current.rightChild);
+				}
+			}
+			
+			file.close();
+			
+			
+		} catch (IOException e) {
+			System.out.println("Error writing to file (Tree.serializeTree)");
+		}
 	}
 	
 	// construct tree from array of chars from serialization file
@@ -322,7 +352,7 @@ public class Tree extends Main {
 			needChildren.remove(0);
 			
 			// left child
-			if ((int) lines.get(i) == 0) {
+			if (lines.get(i) == '\u0000') {
 				Node lChild = new Node();
 				parent.leftChild = lChild;
 				needChildren.add(lChild);
@@ -331,7 +361,7 @@ public class Tree extends Main {
 			}
 			
 			// right child
-			if ((int) lines.get(i + 1) == 0) {
+			if (lines.get(i + 1) == '\u0000') {
 				Node rChild = new Node();
 				parent.rightChild = rChild;
 				needChildren.add(rChild);

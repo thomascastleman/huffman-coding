@@ -38,62 +38,22 @@ public class Main {
 		 * 
 		 */
 		
+		System.out.println("Creating tree from input");
+		
 		Tree t = new Tree("textFiles/input.txt", false);
-		t.encodeFile("textFiles/input.txt", "textFiles/johannah.txt");
-		t.decodeFile("textFiles/johannah.txt", "textFiles/decoded.txt");
+		
+		t.logBinEquiv();
+		
+//		t.encodeFile("textFiles/input.txt", "textFiles/encoded.txt");
+//		t.decodeFile("textFiles/encoded.txt", "textFiles/decoded.txt");
+		
+		t.serializeTree("textFiles/ser.txt");
 		
 		
+		System.out.println("Creating other tree from serialization");
+		Tree otherTree = new Tree("textFiles/ser.txt", true);
+		otherTree.logBinEquiv();
 		
-		
-//		PriorityQueue pq = new PriorityQueue();
-//		
-//		Node n0 = new Node('a');
-//		Node n1 = new Node('b');
-//		Node n2 = new Node('c');
-//		
-//		pq.enqueue(n0,  10);
-//		pq.enqueue(n1,  3);
-//		pq.enqueue(n2,  1);
-//		
-//		Tree t = new Tree();
-//		t.constructFromPQ(pq);
-//		t.initializeBinEquiv();
-		
-//		Tree t = new Tree();
-//		PriorityQueue pq = t.constructPQFromText("this is the text");
-//		t.constructFromPQ(pq);
-//		t.initializeBinEquiv();
-		
-		// t.serializeTree("s.txt");
-		
-//		ArrayList<Character> chars = new ArrayList<Character>();
-//		chars.add('\u0000');
-//		chars.add('a');
-//		chars.add('c');
-//		chars.add('b');
-//		
-//		System.out.println(chars.get(0) == '\u0000');
-//		
-//		System.out.println(chars);
-//		
-//		Tree test = new Tree();
-//		test.constructFromSerialization(chars);
-//		test.initializeBinEquiv();
-//		
-//		System.out.println(test.binEquiv.get('a'));
-//		System.out.println(test.binEquiv.get('b'));
-//		System.out.println(test.binEquiv.get('c'));
-		
-		
-		
-//		t.serializeTree();
-		
-		// t.encode("abccba");
-		
-//		t.decode("1010000011");
-		
-//		String id = UUID.randomUUID().toString();
-//		System.out.println(id);
 		
 	}
 	
@@ -103,3 +63,18 @@ public class Main {
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
