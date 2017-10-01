@@ -1,5 +1,7 @@
 package huffman;
 
+import java.util.*;
+
 public class Main {
 	
 	public int leftBit = 0;
@@ -40,27 +42,35 @@ public class Main {
 		t.constructFromPQ(pq);
 		t.initializeBinEquiv();
 		
+//		ArrayList<Character> chars = new ArrayList<Character>();
+//		chars.add('\u0000');
+//		chars.add('a');
+//		chars.add('c');
+//		chars.add('b');
+//		
+//		System.out.println(chars.get(0) == '\u0000');
+//		
+//		System.out.println(chars);
+//		
+//		Tree test = new Tree();
+//		test.constructFromSerialization(chars);
+//		test.initializeBinEquiv();
+//		
+//		System.out.println(test.binEquiv.get('a'));
+//		System.out.println(test.binEquiv.get('b'));
+//		System.out.println(test.binEquiv.get('c'));
+		
+		
+		
+//		t.serializeTree();
+		
 		// t.encode("abccba");
 		
-		t.decode("1010000011");
+//		t.decode("1010000011");
 		
+//		String id = UUID.randomUUID().toString();
+//		System.out.println(id);
 		
-//		
-//		logNode(t.root);
-//		
-//		System.out.print("\nleft: ");
-//		logNode(t.root.leftChild);
-//		System.out.print("\nright: ");
-//		logNode(t.root.rightChild);
-//		
-//		System.out.print("\nleft: ");
-//		logNode(t.root.leftChild.leftChild);
-//		System.out.print("\nright: ");
-//		logNode(t.root.leftChild.rightChild);
-		
-		
-		
-
 	}
 	
 	public static void logNode(Node n) {

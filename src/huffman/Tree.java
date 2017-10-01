@@ -1,6 +1,7 @@
 package huffman;
 
 import java.util.*;
+import java.io.*;
 
 public class Tree extends Main {
 	
@@ -24,6 +25,30 @@ public class Tree extends Main {
 		 * then, initializeBinEquiv()
 		 * 
 		 */
+		
+		// SERIALIZATION:
+//		String line = null;
+//		ArrayList<Character> lines = new ArrayList<Character>();
+//		try {
+//			FileReader fileReader = new FileReader(filename);
+//			BufferedReader bufferedReader =  new BufferedReader(fileReader);
+//			
+//			while ((line = bufferedReader.readLine()) != null) { 
+//				char toChar = line.charAt(0);
+//				lines.add(toChar);
+//			}
+//
+//			bufferedReader.close();
+//		}
+//		
+//		catch(FileNotFoundException ex) {
+//			System.out.println("Unable to open file '" + filename + "'");
+//		}
+//		catch(IOException ex) {
+//			System.out.println("Error reading file '" + filename + "'");
+//		}
+		
+		// now construct from lines
 	}
 	
 	public Tree() {
@@ -34,11 +59,6 @@ public class Tree extends Main {
 //	public PriorityQueue constructPQFromText(String text) {
 //		
 //	}
-	
-	// construct tree from serialization
-	public void constructFromSerialization(String text) {
-		
-	}
 	
 	// given a priority queue of nodes, construct a huffman tree
 	public void constructFromPQ(PriorityQueue pq) {
@@ -141,7 +161,94 @@ public class Tree extends Main {
 		f.close();
 	}
 	
-	public void serializeTree() {
+	// serialize tree to given file
+	public void serializeTree(String filename) {
 		
+		try {
+			f = new Formatter(filename);
+		} catch (Exception e) { 
+			System.out.println("Error creating file (Tree.serializeTree)");
+		}
+		
+		ArrayList<Node> q = new ArrayList<Node>();
+		
+		q.add(this.root);
+		
+		while (q.size() > 0) {
+			Node current = q.get(0);
+			q.remove(0);
+			
+			if (current.leftChild != null) {
+
+//				if (current.leftChild.content == '\u0000') {
+//					f.format("%c\n", '\u0000');
+//				} else {
+//					f.format("%c\n", current.leftChild.content);
+//				}
+				
+				f.format("%c\n", current.leftChild.content);
+				q.add(current.leftChild);
+			}
+			if (current.rightChild != null) {
+
+//				if (current.rightChild.content == '\u0000') {
+//					f.format("%c\n", '\u0000');
+//				} else {
+//					f.format("%c\n", current.rightChild.content);
+//				}
+				
+				f.format("%c\n", current.rightChild.content);
+				q.add(current.rightChild);
+			}
+		}
+		
+		f.close();
+	}
+	
+	// construct tree from array of chars from serialization file
+	public void constructFromSerialization(ArrayList<Character> lines) {
+		ArrayList<Node> needChildren = new ArrayList<Node>();
+		this.root = new Node();
+		needChildren.add(this.root);
+		
+		for (int i = 0; i < lines.size() - 1; i += 2) {
+			Node parent = needChildren.get(0);
+			needChildren.remove(0);
+			
+			// left child
+			if ((int) lines.get(i) == 0) {
+				Node lChild = new Node();
+				parent.leftChild = lChild;
+				needChildren.add(lChild);
+			} else {
+				parent.leftChild = new Node(lines.get(i));
+			}
+			
+			// right child
+			if ((int) lines.get(i + 1) == 0) {
+				Node rChild = new Node();
+				parent.rightChild = rChild;
+				needChildren.add(rChild);
+			} else {
+				parent.rightChild = new Node(lines.get(i + 1));
+			}
+		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
