@@ -2,8 +2,12 @@ package huffman;
 
 import java.util.*;
 import java.io.*;
+import huffman.Main.TreeType;
 
 public class Tree extends Main {
+	
+	public int leftBit;
+	public int rightBit;
 	
 	public Node root; // public nodity
 	public HashMap<Character, String> binEquiv = new HashMap<Character, String>();	// hashmap of characters to their binary representations as determined by tree
@@ -11,8 +15,17 @@ public class Tree extends Main {
 	public Formatter f;
 	
 	// constructor for Tree: given filename of either text or serialization data, and boolean indicating which one it is 
-	public Tree(String filename, Boolean fromSerialization) {
+	public Tree(TreeType type, String filename, Boolean fromSerialization) {
 		filename = filename.replaceAll("/", fileSeparator);//universal system paths 
+		
+		// configure tree type
+		if (type == TreeType._0LEFT_1RIGHT) {
+			this.leftBit = 0;
+			this.rightBit = 1;
+		} else if (type == TreeType._1LEFT_0RIGHT) {
+			this.leftBit = 1;
+			this.rightBit = 0;
+		}
 		
 		ArrayList<Character> chars = new ArrayList<Character>();
 		String text = "";
@@ -142,11 +155,11 @@ public class Tree extends Main {
 	public void dfsForBinEquiv(Node n, String currentBinString) {
 		// if left child exists
 		if (n.leftChild != null) {
-			dfsForBinEquiv(n.leftChild, currentBinString + String.valueOf(super.leftBit));
+			dfsForBinEquiv(n.leftChild, currentBinString + String.valueOf(this.leftBit));
 		}
 		// if right child exists
 		if (n.rightChild != null) {
-			dfsForBinEquiv(n.rightChild, currentBinString + String.valueOf(super.rightBit));
+			dfsForBinEquiv(n.rightChild, currentBinString + String.valueOf(this.rightBit));
 		}
 		// if char not null
 		if ((int) n.content != 0) {
@@ -195,7 +208,6 @@ public class Tree extends Main {
 			BufferedReader bufferedReader =  new BufferedReader(fileReader);
 			
 			while ((line = bufferedReader.readLine()) != null) { 
-				System.out.println(line);
 				total += line + '\n';
 			}
 
@@ -248,7 +260,7 @@ public class Tree extends Main {
 			// if bit is 1
 			if (binary.charAt(i) == '\u0031') {
 				// move to left or right child according to tree rules
-				if (super.leftBit == 1) {
+				if (this.leftBit == 1) {
 					current = current.leftChild;
 				} else {
 					current = current.rightChild;
@@ -256,7 +268,7 @@ public class Tree extends Main {
 			// if bit is 0
 			} else if (binary.charAt(i) == '\u0030') {
 				// move to left or right child according to tree rules
-				if (super.leftBit == 0) {
+				if (this.leftBit == 0) {
 					current = current.leftChild;
 				} else {
 					current = current.rightChild;

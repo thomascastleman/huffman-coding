@@ -5,7 +5,6 @@ import java.util.*;
 public class PriorityQueue extends Tree {
 	
 	public ArrayList<Node> objects = new ArrayList<Node>();
-	
 	public HashMap<Node, Integer> nodeToPriority = new HashMap<Node, Integer>();
 	
 	// enqueue node to priority queue
