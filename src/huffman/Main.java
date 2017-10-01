@@ -23,18 +23,3 @@ public class Main {
 		
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
