@@ -1,2 +1,0 @@
-Here is the training text which I'm using to create this priority queue and we'll see how it
-goes

@@ -6,8 +6,13 @@ public class Main {
 	
 	public int leftBit = 0;
 	public int rightBit = 1;
+	
+	public static String fileSeparator = System.getProperty("file.separator");
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
+		if (fileSeparator != "/") {
+			fileSeparator += "\\";
+		}
 		
 		/*
 		 * Projected Use:
@@ -33,9 +38,9 @@ public class Main {
 		 * 
 		 */
 		
-		Tree t = new Tree("input.txt", false);
-		
-		System.out.println(t.binEquiv.get('H'));
+		Tree t = new Tree("textFiles/input.txt", false);
+		t.encodeFile("textFiles/input.txt", "textFiles/johannah.txt");
+		t.decodeFile("textFiles/johannah.txt", "textFiles/decoded.txt");
 		
 		
 		

@@ -11,6 +11,7 @@ public class Tree extends Main {
 	public Formatter f;
 	
 	public Tree(String filename, Boolean fromSerialization) {
+		filename = filename.replaceAll("/", fileSeparator);//universal system paths 
 		
 		ArrayList<Character> chars = new ArrayList<Character>();
 		String text = "";
@@ -154,19 +155,68 @@ public class Tree extends Main {
 		}
 	}
 	
-	public void encodeFile(String filename) {
+	public void encodeFile(String readFrom, String writeTo) {
+		readFrom = readFrom.replaceAll("/", fileSeparator);//universal system paths 
 		
+		String total = "";
+		
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(readFrom);
+			BufferedReader bufferedReader =  new BufferedReader(fileReader);
+			
+			while ((line = bufferedReader.readLine()) != null) { 
+				total += line + '\n';
+			}
+
+			bufferedReader.close();
+		}
+		
+		catch(FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + readFrom + "'");
+		}
+		catch(IOException ex) {
+			System.out.println("Error reading file '" + readFrom + "'");
+		}
+		
+		this.encode(total, writeTo);
 	}
 	
-	public void decodeFile(String filename) {
+	public void decodeFile(String readFrom, String writeTo) {
+		readFrom = readFrom.replaceAll("/", fileSeparator);//universal system paths 
+		
+		String total = "";
+		
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(readFrom);
+			BufferedReader bufferedReader =  new BufferedReader(fileReader);
+			
+			while ((line = bufferedReader.readLine()) != null) { 
+				System.out.println(line);
+				total += line + '\n';
+			}
+
+			bufferedReader.close();
+		}
+		
+		catch(FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + readFrom + "'");
+		}
+		catch(IOException ex) {
+			System.out.println("Error reading file '" + readFrom + "'");
+		}
+		
+		this.decode(total, writeTo);
 		
 	}
 	
 	// encode a string of text using already existing hashmap from chars to binary
-	public void encode(String text) {
+	public void encode(String text, String filename) {
+		filename = filename.replaceAll("/", fileSeparator);//universal system paths 
 		
 		try {
-			f = new Formatter("binary.txt");
+			f = new Formatter(filename);
 		} catch (Exception e) {
 			System.out.println("Error creating file (Tree.encode)");
 		}
@@ -181,10 +231,11 @@ public class Tree extends Main {
 		
 	}
 	
-	public void decode(String binary) {
+	public void decode(String binary, String filename) {
+		filename = filename.replaceAll("/", fileSeparator);//universal system paths 
 		
 		try {
-			f = new Formatter("decoded.txt");
+			f = new Formatter(filename);
 		} catch (Exception e) {
 			System.out.println("Error creating file (Tree.decode)");
 		}
@@ -217,6 +268,7 @@ public class Tree extends Main {
 	
 	// serialize tree to given file
 	public void serializeTree(String filename) {
+		filename = filename.replaceAll("/", fileSeparator);//universal system paths 
 		
 		try {
 			f = new Formatter(filename);
