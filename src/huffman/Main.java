@@ -17,6 +17,9 @@ public class Main {
 		tree.encodeFile("textFiles/input.txt", "textFiles/encoded.txt");
 		tree.serializeTree("textFiles/serialization.txt");
 		
+		// log encoding scheme
+		tree.logEncodingScheme();
+		
 		// construct new tree off of serialization of previous tree, decode text
 		Tree newTree = new Tree(TreeType._0LEFT_1RIGHT, "textFiles/serialization.txt", true);
 		newTree.decodeFile("textFiles/encoded.txt", "textFiles/decoded.txt");

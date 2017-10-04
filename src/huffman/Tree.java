@@ -490,4 +490,27 @@ public class Tree extends Main {
 			System.out.println("Error creating file (Tree.encode)");
 		}
 	}
+	
+	public void logEncodingScheme() {
+		System.out.println("Encoding Scheme: ");
+		ArrayList<Character> chars = new ArrayList<Character>(this.binEquiv.keySet());
+		
+		for (int i = 0; i < chars.size(); i++) {
+			if (chars.get(i) == '\n') {
+				System.out.println("'\\n' " + this.binEquiv.get(chars.get(i)));
+			} else {
+				System.out.println("'" + chars.get(i) + "' " + this.binEquiv.get(chars.get(i)));
+			}
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
