@@ -19,7 +19,12 @@ public class Main {
 		
 		// construct new tree off of serialization of previous tree, decode text
 		Tree newTree = new Tree(TreeType._0LEFT_1RIGHT, "textFiles/serialization.txt", true);
-		tree.decodeFile("textFiles/encoded.txt", "textFiles/decoded.txt");
+		newTree.decodeFile("textFiles/encoded.txt", "textFiles/decoded.txt");
 		
+		// get percent compression
+		System.out.println(tree.getPercentCompression("textFiles/input.txt", "textFiles/encoded.txt") + "%");
+		
+		// to demonstrate compression, write uncompressed binary to file
+		tree.writeUnicodeToFile("textFiles/input.txt", "textFiles/unicode.txt");
 	}
 }

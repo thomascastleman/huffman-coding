@@ -2,6 +2,8 @@ package huffman;
 
 import java.util.*;
 import java.io.*;
+import java.nio.charset.Charset;
+
 import huffman.Main.TreeType;
 
 public class Tree extends Main {
@@ -372,6 +374,120 @@ public class Tree extends Main {
 			} else {
 				parent.rightChild = new Node(chars.get(i + 1));
 			}
+		}
+	}
+	
+	// given files containing original text and binary encoding from this tree, calculate percent compression
+	public double getPercentCompression(String originalFile, String encodedFile) {
+		//universal system paths 
+		originalFile = originalFile.replaceAll("/", fileSeparator);
+		encodedFile = encodedFile.replaceAll("/", fileSeparator);
+		
+		// read encoded file
+		String line = null;
+		String total = "";
+		try {
+			FileReader fileReader = new FileReader(encodedFile);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			while ((line = bufferedReader.readLine()) != null) {
+				total += line;
+			}
+			bufferedReader.close();
+		} catch(FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + encodedFile + "'");
+		}
+		catch(IOException ex) {
+			System.out.println("Error reading file '" + encodedFile + "'");
+		}
+		
+		int compressedBits = total.length();
+		
+		// read original file
+		total = "";
+		try {
+			FileReader fileReader = new FileReader(originalFile);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			while ((line = bufferedReader.readLine()) != null) {
+				total += line + '\n';
+			}
+			bufferedReader.close();
+		} catch(FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + originalFile + "'");
+		}
+		catch(IOException ex) {
+			System.out.println("Error reading file '" + originalFile + "'");
+		}
+		
+		String unicode = this.encodeToUnicode(total);
+		int rawBits = unicode.length();
+		
+		double percentCompression = (1.0 - ((double) compressedBits / (double) rawBits)) * 100.0;
+		
+		return percentCompression;
+	}
+	
+	// encode a string in standard UTF-8
+	public String encodeToUnicode(String text) {
+		
+		String unicode_encoding = "";
+		for (int i = 0; i < text.length(); i++) {
+			
+			byte[] bytes = String.valueOf(text.charAt(i)).getBytes(Charset.forName("UTF-8"));
+			
+			for (byte b : bytes) {
+				
+				String str = Integer.toString(b, 2);
+				String binString;
+				
+				// add extra 0s if necessary
+				if (str.length() < 8) {
+					binString = "";
+					for (int j = 0; j < 8 - str.length(); j++) {
+						binString += "0";
+					}
+					binString += str;
+				} else {
+					binString = str;
+				}
+
+				// add to unicode encoding
+				unicode_encoding += binString;
+			}
+		}
+		
+		return unicode_encoding;
+	}
+	
+	public void writeUnicodeToFile(String readFrom, String writeTo) {
+		//universal system paths
+		readFrom = readFrom.replaceAll("/", fileSeparator);
+		writeTo = writeTo.replaceAll("/", fileSeparator);
+		
+		String line = null;
+		String total = "";
+		try {
+			FileReader fileReader = new FileReader(readFrom);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			while ((line = bufferedReader.readLine()) != null) {
+				total += line;
+			}
+			bufferedReader.close();
+		} catch(FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + readFrom + "'");
+		}
+		catch(IOException ex) {
+			System.out.println("Error reading file '" + readFrom + "'");
+		}
+		
+		String encoded = this.encodeToUnicode(total);
+		
+		try {
+			f = new Formatter(writeTo);
+			f.format("%s", encoded);
+			f.close();
+			
+		} catch (Exception e) {
+			System.out.println("Error creating file (Tree.encode)");
 		}
 	}
 }
